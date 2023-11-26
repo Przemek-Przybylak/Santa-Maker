@@ -1,2 +1,9 @@
-<h2>lista</h2>
+<h2>Lista dzieci</h2>
+<ul>
+   {{#each childrenList}}
+       <li>
+           {{this.name}} {{this.gift}}
+       </li>
+   {{/each}}
+</ul>
 
