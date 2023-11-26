@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const {create} = require('express-handlebars');
 const methodOverride = require('method-override');
 const {handleError} = require("./utils/error");
@@ -19,18 +20,16 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true,
 }));
-
 app.use(express.static('public'));
 
-app.engine('.hbs', hbs.engine);
+app.engine('.hbs' , hbs.engine);
 app.set('view engine', '.hbs');
 
 app.use('/', homeRouter);
 app.use('/child', childRouter);
 app.use('/gift', giftRouter);
-
-
-
+//
+// app.use(handleError) do zrobienia widok erora
 app.listen(3000, 'localhost', () => {
     console.log('Listening on http://localhost:3000')
 })

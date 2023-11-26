@@ -7,7 +7,7 @@ giftRouter
     .get('/', async (req, res) => {
         const giftList = await GiftRecord.listAll();
         res.render('gift/list', {
-            giftList
+            giftList // przekazujemy giftsy do listy do wyświetlenia
         });
     }) // pobieramy i pokazujemy wszystkie prezenty
 

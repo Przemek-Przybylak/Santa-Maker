@@ -1,9 +1,8 @@
-class ValidationError extends Error {}
+class ValidationError extends Error{}
 
 const handleError = (err, req, res, next) => {
 
     console.log(err);
-
     res
         .status(err instanceof  ValidationError ? 400 : 500 )
         .render('error', {
