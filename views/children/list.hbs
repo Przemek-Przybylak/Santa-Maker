@@ -7,7 +7,7 @@
                 <select>
                     <option value="">brak</option>
                     {{#each ../giftsList}}
-                        <option value="{{this.name}}">{{this.name}}</option>
+                        <option value="{{this.id}}">{{this.name}}</option>
                     {{/each}}
                 </select>
             </label>
@@ -17,7 +17,7 @@
 </ul>
 
 <h2>Dodaj dziecko do listy</h2>
-<form action="">
+<form action="/child" method="POST">
     <label>
         Imię
         <input name="name" type="text">
