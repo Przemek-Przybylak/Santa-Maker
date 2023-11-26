@@ -1,9 +1,24 @@
 <h2>Lista dzieci</h2>
 <ul>
-   {{#each childrenList}}
-       <li>
-           {{this.name}} {{this.gift}}
-       </li>
-   {{/each}}
+    {{#each childrenList}}
+        <li>
+            <label>
+                {{this.name}}
+                <select>
+                    <option value="">brak</option>
+                </select>
+            </label>
+            <button>zapisz</button>
+        </li>
+    {{/each}}
 </ul>
+
+<h2>Dodaj dziecko do listy</h2>
+<form action="">
+    <label>
+        Imię
+        <input type="text">
+    </label>
+    <button>Dodaj</button>
+</form>
 

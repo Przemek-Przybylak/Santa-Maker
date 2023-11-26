@@ -5,7 +5,7 @@ const childRouter = Router();
 
 childRouter.get('/', (req, res) => {
     const childrenList = ChildRecord.listAll();
-    res.render('/list', {
+    res.render('children/list', {
         childrenList
     });
 });
