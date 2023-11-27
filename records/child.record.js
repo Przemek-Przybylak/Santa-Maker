@@ -1,51 +1,63 @@
-const {pool} = require("../utils/db");
-const {ValidationError} = require("../utils/error");
-const {v4: uuid} = require("uuid");
+const { pool } = require("../utils/db");
+const { ValidationError } = require("../utils/error");
+const { v4: uuid } = require("uuid");
 
 class ChildRecord {
-    constructor(obj) {
-        if (!obj.name || obj.name.length < 3 || obj.name.length > 25) {
-            throw new ValidationError('imię musi mieć od 3 do 25 znaków.')
-        }
-
-        this.id = obj.id;
-        this.name = obj.name;
+  constructor(obj) {
+    if (!obj.name || obj.name.length < 3 || obj.name.length > 25) {
+      throw new ValidationError("imię musi mieć od 3 do 25 znaków.");
     }
 
-    async insert() {
-        if (!this.id) {
-            this.id = uuid();
-        }
+    this.id = obj.id;
+    this.name = obj.name;
+    this.giftId = obj.giftId;
+  }
 
-        await pool.execute("INSERT INTO `children`(`id`, `name`) VALUES(:id, :name)", {
-            id: this.id,
-            name: this.name,
-        });
-
-        return this.id;
+  async insert() {
+    if (!this.id) {
+      this.id = uuid();
     }
 
-    static async listAll() {
-        const [results] = await pool.execute("SELECT * FROM `children` ORDER BY `name` ASC");
-        return results;
-    }
+    await pool.execute(
+      "INSERT INTO `children`(`id`, `name`) VALUES(:id, :name)",
+      {
+        id: this.id,
+        name: this.name,
+      }
+    );
 
-    static async getOne(id) {
-        const [results] = await pool.execute("SELECT * FROM `children` WHERE `id` = :id", {
-            id,
-        });
-        return results.length === 0 ? null : new ChildRecord(results[0]); // wzięcie pojedynczego dziecka
-    }
+    return this.id;
+  }
 
-    async update() {
-        await pool.execute("UPDATE `children` SET `name` = :name, `giftId` = :giftId WHERE `id` = :id", {
-            id: this.id,
-            name: this.name,
-            giftId: this.giftId, // dodanie id przentu do dziecka
-        });
-    }
+  static async listAll() {
+    const [results] = await pool.execute(
+      "SELECT * FROM `children` ORDER BY `name` ASC"
+    );
+    return results.map((obj) => new ChildRecord(obj));
+  }
+
+  static async getOne(id) {
+    const [results] = await pool.execute(
+      "SELECT * FROM `children` WHERE `id` = :id",
+      {
+        id,
+      }
+    );
+    return results.length === 0 ? null : new ChildRecord(results[0]); // wzięcie pojedynczego dziecka
+  }
+
+  async update() {
+    await pool.execute(
+      "UPDATE `children` SET `name` = :name, `giftId` = :giftId WHERE `id` = :id",
+      {
+        id: this.id,
+        name: this.name,
+        giftId: this.giftId, // dodanie id przentu do dziecka
+      }
+    );
+  }
 }
 
 module.exports = {
-    ChildRecord,
-}
+  ChildRecord,
+};
