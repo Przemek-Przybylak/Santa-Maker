@@ -31,8 +31,13 @@ childRouter
         }
 
         const gift = req.body.giftId === "" ? null : await GiftRecord.getOne(req.body.giftId);
-
         child.giftId = gift?.id ?? null;
+
+        if (gift) {
+            if(gift.count <= await gift.countGivenGifts()) {
+                throw new ValidationError('Ten prezent jest niedostępny :(')
+            }
+        }
         await child.update();
 
         res.redirect('/child');
