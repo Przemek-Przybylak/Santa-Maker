@@ -7,11 +7,13 @@ const {homeRouter} = require("./routers/home");
 const {childRouter} = require("./routers/child");
 const {giftRouter} = require("./routers/gift");
 require('./utils/db');
+const {handlebarsHelpers} = require("./utils/handlebars-helpers");
 
 const app = express();
 
 const hbs = create({
-    extname: '.hbs'
+    extname: '.hbs',
+    helpers: handlebarsHelpers
 });
 
 app.use(methodOverride('_method'));
