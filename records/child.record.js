@@ -29,8 +29,23 @@ class ChildRecord {
         const [results] = await pool.execute("SELECT * FROM `children` ORDER BY `name` ASC");
         return results;
     }
+
+    static async getOne(id) {
+        const [results] = await pool.execute("SELECT * FROM `children` WHERE `id` = :id", {
+            id,
+        });
+        return results.length === 0 ? null : new ChildRecord(results[0]); // wzięcie pojedynczego dziecka
+    }
+
+    async update() {
+        await pool.execute("UPDATE `children` SET `name` = :name, `giftId` = :giftId WHERE `id` = :id", {
+            id: this.id,
+            name: this.name,
+            giftId: this.giftId, // dodanie id przentu do dziecka
+        });
+    }
 }
 
-module.exports ={
+module.exports = {
     ChildRecord,
 }

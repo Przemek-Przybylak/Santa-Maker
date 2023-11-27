@@ -1,6 +1,7 @@
 const {Router} = require("express");
 const {ChildRecord} = require("../records/child.record");
 const {GiftRecord} = require("../records/gift.record");
+const {ValidationError} = require("../utils/error");
 
 const childRouter = Router();
 
@@ -22,10 +23,20 @@ childRouter
 
         res.redirect('/child'); // odsyłamy do dzieci
 
-        res.render('child/list', {
-            childrenList
-        });
-    });
+    })
+    .patch('/gift/:childId', async (req, res) => {
+        const child = await ChildRecord.getOne(req.params.childId); // obsługa dodawania z selecta
+        if (child === null) {
+            throw new ValidationError('Nie znaleziono dziecka z podanym ID');
+        }
+
+        const gift = req.body.giftId === "" ? null : await GiftRecord.getOne(req.body.giftId);
+
+        child.giftId = gift?.id ?? null;
+        await child.update();
+
+        res.redirect('/child');
+    })
 
 module.exports = {
     childRouter,
